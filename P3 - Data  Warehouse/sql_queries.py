@@ -154,8 +154,7 @@ select  TIMESTAMP 'epoch' + ts/1000 *INTERVAL '1 second' as start_time
 
 #As the user can upgrade and downgrade th account the level can switch from free to paid to free and incur multiple row
 #use CTAS to get latest unique row
-#follow the idea or truncate and load
-#alternative practice should be follow SCD type 3
+
 user_table_insert = ("""
 INSERT INTO fdn_dim_users
 WITH UniqueUsers (userId, firstName, lastName, gender, level,RID)
