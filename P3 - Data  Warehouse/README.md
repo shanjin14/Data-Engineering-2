@@ -54,5 +54,12 @@ The etl job flow as below:
    Redshift allows you to alter the SORTKEY, DISTKEY after creation [link to Redshift Documentation on this](https://docs.aws.amazon.com/redshift/latest/dg/r_ALTER_TABLE.html)
    Side note: Allow SORTKEY, DISTKEY in alter table is great for Redshift. If we are using Azure Synapse, we would need to CTAS to recreate a new table ,  rename the table, drop the table [Link here](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-tables-distribute#re-create-the-table-with-a-new-distribution-column)
 
+#Interesting part
+1. As the user can upgrade and downgrade th account the level can switch from free to paid to free and incur multiple row in the log events.
+2. In order to deduplicate and get the latest status, we will use CTAS to get the most latest row
+3. Having said that, I think it would be better SCD type 4 construction. We can create a "stg_raw_users_history" which have all the historical status
+4. After that we create a dimension view call "fdn_dim_users" which query the "stg_raw_users_history" to get the latest information
+5. If the table do become a bottleneck for query speed, we can create materialized view and refresh it each time the data load is run.
+
 ### Future improvement 
 1. This is implemented using Truncate and Load. If we want to move to incremental load, I think we would need additional to capture what are changed such as CDC at source system.
