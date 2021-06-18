@@ -4,12 +4,24 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
+    """
+    Loop through each quueries and drop the tables
+    Input: 
+    cur : cursor
+    conn : connection    
+    """
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def create_tables(cur, conn):
+    """
+        Loop through each quueries and create the required tables
+    Input: 
+    cur : cursor
+    conn : connection   
+    """
     for query in create_table_queries:
         #print(query)
         cur.execute(query)
@@ -17,6 +29,9 @@ def create_tables(cur, conn):
 
 
 def main():
+    """
+    The main method run the above two methods 
+    """
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 

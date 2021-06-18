@@ -60,57 +60,63 @@ year integer
 
 songplay_table_create = ("""
 CREATE TABLE fdn_fact_songplays 
-(songplay_id bigint IDENTITY(0,1) distkey, 
-start_time timestamp, 
-user_id integer, 
-level nvarchar(20), 
+(songplay_id bigint IDENTITY(0,1) NOT NULL distkey, 
+start_time timestamp NOT NULL, 
+user_id integer NOT NULL, 
+level nvarchar(20) , 
 song_id varchar, 
 artist_id VARCHAR, 
 session_id integer, 
 location nvarchar(100), 
-user_agent nvarchar(max)
+user_agent nvarchar(max),
+PRIMARY KEY (songplay_id)
 ) SORTKEY AUTO;
 """)
 
 user_table_create = ("""
 CREATE TABLE fdn_dim_users 
-(user_id integer, 
+(user_id integer NOT NULL, 
 first_name nvarchar(100), 
 last_name nvarchar(100) distkey, 
 gender nvarchar(10), 
-level nvarchar(20)
+level nvarchar(20),
+PRIMARY KEY (user_id)
 )
 """)
 
 song_table_create = ("""
 CREATE TABLE fdn_dim_songs 
-(song_id varchar  , 
-title VARCHAR, 
-artist_id VARCHAR distkey, 
+(song_id varchar NOT NULL , 
+title  VARCHAR NOT NULL, 
+artist_id VARCHAR NOT NULL distkey, 
 year integer sortkey, 
-duration double precision
+duration double precision,
+PRIMARY KEY (song_id)
 )
 """)
 
 artist_table_create = ("""
 CREATE TABLE fdn_dim_artists 
-(artist_id VARCHAR distkey , 
+(artist_id VARCHAR NOT NULL distkey , 
 name varchar, 
 location varchar sortkey, 
 lattitude  Decimal(8,6), 
-longitude Decimal(9,6)
+longitude Decimal(9,6),
+PRIMARY KEY (artist_id)
 )
 """)
 
 time_table_create = ("""
 CREATE TABLE fdn_dim_times
-(start_time timestamp distkey, 
+(start_time timestamp NOT NULL distkey, 
 hour integer, 
 day integer, 
 week integer, 
 month integer, 
 year integer , 
-weekday integer
+weekday integer,
+PRIMARY KEY (start_time)
+
 ) SORTKEY AUTO;
 """)
 
@@ -138,15 +144,19 @@ INSERT INTO fdn_fact_songplays (start_time,user_id,level,song_id,artist_id,sessi
 select  TIMESTAMP 'epoch' + ts/1000 *INTERVAL '1 second' as start_time
         ,userId,level,song_id,artist_id, sessionId, location, userAgent
                             from stg_raw_events A 
-                            join (select distinct song_id, title  from stg_raw_songs) B on A.song=B.title
-                            join (select distinct artist_id,artist_name from stg_raw_songs) C on A.artist=C.artist_name
+                            LEFT JOIN stg_raw_songs songs
+                              ON A.song = songs.title
+                              AND A.artist = songs.artist_name
+                              AND A.length = songs.duration
                             where page='NextSong'
                             ;
 """)
 
 user_table_insert = ("""
 INSERT INTO fdn_dim_users
-select distinct userId, firstName, lastName, gender, level from stg_raw_events;
+select distinct userId, firstName, lastName, gender, level from stg_raw_events
+where page='NextSong'
+;
 """)
 
 song_table_insert = ("""

@@ -4,6 +4,12 @@ from sql_queries import copy_table_queries, insert_table_queries
 import time
 
 def load_staging_tables(cur, conn):
+    """
+    Loop through each quueries and copy the data from S3 to the staging table
+    Input: 
+    cur : cursor
+    conn : connection   
+    """
     for query in copy_table_queries:
         start = time.time()
         print(query)
@@ -13,6 +19,12 @@ def load_staging_tables(cur, conn):
 
 
 def insert_tables(cur, conn):
+    """
+    Loop through each quueries and insert the data to the dimensional model (1 Fact table , 5 Dimension table)
+    Input: 
+    cur : cursor
+    conn : connection   
+    """
     for query in insert_table_queries:
         start = time.time()
         print(query)
@@ -22,6 +34,9 @@ def insert_tables(cur, conn):
 
 
 def main():
+    """
+    The main method to run the above queries
+    """
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 
