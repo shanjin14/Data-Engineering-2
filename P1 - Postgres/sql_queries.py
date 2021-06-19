@@ -29,7 +29,8 @@ create table if not exists users
 first_name VARCHAR, 
 last_name VARCHAR , 
 gender VARCHAR, 
-level VARCHAR
+level VARCHAR,
+PRIMARY KEY (user_id)
 )
 """)
 
@@ -39,7 +40,8 @@ create table if not exists songs
 title  VARCHAR NOT NULL, 
 artist_id VARCHAR NOT NULL , 
 year integer , 
-duration double precision
+duration double precision,
+PRIMARY KEY (song_id)
 )
 """)
 
@@ -49,7 +51,9 @@ CREATE TABLE if not exists artists
 name varchar, 
 location varchar , 
 lattitude  Decimal(8,6), 
-longitude Decimal(9,6))
+longitude Decimal(9,6),
+PRIMARY KEY (artist_id)
+)
 """)
 
 time_table_create = ("""
@@ -73,14 +77,17 @@ INSERT INTO songplays (start_time,user_id ,level ,song_id ,artist_id,session_id 
 
 user_table_insert = ("""
 INSERT INTO users (user_id,first_name,last_name,gender,level ) VALUES (%s, %s, %s,%s, %s)
+ON CONFLICT (user_id) DO UPDATE SET level=EXCLUDED.level;
 """)
 
 song_table_insert = ("""
 INSERT INTO songs (song_id,title , artist_id, year , duration) VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT (song_id) DO NOTHING;
 """)
 
 artist_table_insert = ("""
 INSERT INTO artists (artist_id,name ,location,lattitude,longitude) VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT (artist_id) DO NOTHING;
 """)
 
 

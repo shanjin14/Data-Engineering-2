@@ -8,9 +8,6 @@ from sql_queries import *
 
 def process_song_file(cur, filepath):
     # open song file
-    """
-    process the song raw data
-    """
     df = pd.read_json(filepath, lines=True)
 
     # insert song record
@@ -19,14 +16,12 @@ def process_song_file(cur, filepath):
 
     # insert artist record
     artist_data = df[['artist_id','artist_name','artist_location','artist_latitude','artist_longitude']].values[0]
+    #print(artist_data)
     cur.execute(artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
     # open log file
-    """
-    process the log data
-    """
     df = pd.read_json(filepath, lines=True)
 
     # filter by NextSong action
@@ -69,9 +64,6 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
-    """
-    A generalised method to read the file from filepath and apply the method abovee through the input "func"
-    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -91,9 +83,6 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
-    """
-    Main method to start the process
-    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
