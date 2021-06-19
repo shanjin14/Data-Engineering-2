@@ -7,7 +7,7 @@ def create_database(createdb=True):
     - Creates and connects to the sparkifydb
     - Returns the connection and cursor to sparkifydb
     """
-    print("Arg ",createdb)
+    #print("Arg ",createdb)
     # connect to default database
     conn = psycopg2.connect("host=127.0.0.1 dbname=studentdb user=student password=student")
     conn.set_session(autocommit=True)
@@ -59,8 +59,9 @@ def main():
     
     - Finally, closes the connection. 
     """
-    if sys.argv[1] is None:
-        createdbflag = True
+    print(len(sys.argv))
+    if len(sys.argv)<=1:
+        createdbflag = "True"
     else:
         createdbflag = sys.argv[1]
     cur, conn = create_database(createdb=createdbflag)
