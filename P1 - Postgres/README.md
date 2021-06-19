@@ -11,6 +11,8 @@ The database design consists of five tables:
 4. time - the time table 
 5. user - the list of users
 
+ER Diagram as below:
+
 ![ER Diagram](ERD.png)
 
 ### ETL Process
