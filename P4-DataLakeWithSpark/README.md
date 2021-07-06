@@ -41,7 +41,7 @@ The etl job flow as below:
 - Note: remember to choose a EC2 key pair. It is required to SSH putty into the Hadoop cluster to do the work
 2. SSH into the master using putty. Instruction is [here] (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-connect-master-node-ssh.html)
 3. below is the aws command to run in the terminal after you SSH into your masternode:
-  1. aws s3 cp s3://sparkify-code ./ #it copy all the file inthe sparkify-code bucket
+  1. aws s3 cp s3://sparkify-code ./ --recursive #it copy all the file inthe sparkify-code bucket
   2. python-submit etl.py
 4. Fix any issue based on the error you see...
 
