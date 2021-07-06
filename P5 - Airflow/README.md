@@ -1,5 +1,5 @@
 ### Introduction on Airflow
-Apache Airflow is powerful too for orchestrating ETL pipeline.
+Apache Airflow is powerful tool for orchestrating ETL pipeline.
 
 GCP and AWS have managed service for Airflow:
 [AWS - MWAA](https://aws.amazon.com/managed-workflows-for-apache-airflow/)
